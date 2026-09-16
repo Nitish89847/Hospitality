@@ -9,7 +9,7 @@ class Hospital(models.Model):
 	longitude = models.FloatField(null=True, blank=True)
 	specialties	= models.JSONField(default=list)          #cardiology neurology orthopedics pediatrics obstetrics gynecology oncology ophthalmology dermatology psychiatry ENT gastroenterology nephrology pulmonology rheumatology endocrinology urology
 	empanelled_schemes = models.JSONField(default=list)			#	["PMJAY",	"ESI"]
-	network_insurers = models.JSONField(default=list)					#	insurer	names	this	hospital	accepts
+	network_insurers = models.JSONField(default=list,null=True, blank=True)					#	insurer	names	this	hospital	accepts
 
 class RoomType(models.Model):
 	hospital = models.ForeignKey(Hospital, related_name="room_types", on_delete=models.CASCADE)
