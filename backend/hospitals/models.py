@@ -19,6 +19,9 @@ class Hospital(models.Model):
 				"A hospital must have at least one empanelled scheme or one network insurer."
 			)
 
+	def __str__(self):
+		return self.name
+
 class RoomType(models.Model):
 	hospital = models.ForeignKey(Hospital, related_name="room_types", on_delete=models.CASCADE)
 	category	=	models.CharField(max_length=50)
