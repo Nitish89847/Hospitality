@@ -12,7 +12,7 @@ class Policy(models.Model):
     insurer	= models.CharField(max_length=255)
     scheme_type	= models.CharField(max_length=20,choices=SCHEME_CHOICES)
     sum_insured	= models.DecimalField(max_digits=12,decimal_places=2)
-    room_eligibility = models.JSONField()	#	{"category":"semi-private",	"cap_per_day":	3000}
+    room_eligibility = models.JSONField()
     covered_procedures = models.JSONField(default=list)  #surgery,knee replacement,heart bypass,appendectomy
     exclusions = models.JSONField(default=list)     #List all that does not covered
     co_pay_percent = models.DecimalField(max_digits=5,decimal_places=2,	default=0)    #part of bill people have to pay

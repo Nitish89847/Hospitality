@@ -5,6 +5,7 @@ from rest_framework import permissions
 from insurance.models import Policy
 from .models import Hospital
 from .serializers import HospitalSerializer
+from .services.eligibility_engine import compute_room_coverage
 
 # Create your views here.
 
@@ -15,5 +16,17 @@ class HospitalMatchView(APIView):
         policy_id = request.query_params.get("policy_id")
         policy = Policy.objects.get(id=policy_id, owner=request.user)
 
-        matches = Hospital.objects.filter(network_insurers__contains=[policy.insurer])
-        return Response(HospitalSerializer(matches, many=True).data)
+        if policy.scheme_type == "private":
+            hospitals = Hospital.objects.filter(network_insurers__contains=[policy.insurer])
+        else:
+            hospitals = Hospital.objects.filter(empanelled_schemes__contains=[policy.scheme_type])
+
+        result = []
+        for hospital in hospitals:
+            hospital_data = HospitalSerializer(hospital).data
+            for room in hospital_data["room_types"]:
+                room_obj = hospital.room_types.get(id=room["id"])
+                room.update(compute_room_coverage(policy, room_obj))
+            result.append(hospital_data)
+
+        return Response(result)
