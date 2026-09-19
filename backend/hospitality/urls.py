@@ -17,13 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-def debug_settings(request):
-    return JsonResponse({"ALLOWED_HOSTS": settings.ALLOWED_HOSTS})
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/insurance/", include("insurance.urls")),
     path("api/hospitals/", include("hospitals.urls")),
-    path("debug-settings/", debug_settings),
 ]
