@@ -51,6 +51,12 @@ INSTALLED_APPS = [
     "hospitals",
     "journey",
     "ai_explainer",
+
+    REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 ]
 
 MIDDLEWARE = [
