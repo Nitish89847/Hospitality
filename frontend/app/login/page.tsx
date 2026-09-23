@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginRequest } from "@/lib/api";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -67,6 +68,12 @@ export default function LoginPage() {
         >
           {loading ? "Logging in..." : "Log In"}
         </button>
+        <p className="text-sm text-center mt-4 text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
+        </p>
       </form>
     </main>
   );

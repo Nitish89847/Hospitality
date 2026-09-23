@@ -25,3 +25,24 @@ export async function authenticatedFetch(path: string, token: string) {
 
   return res.json();
 }
+
+export async function registerRequest(data: {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  phone_number: string;
+}) {
+  const res = await fetch(`${API_BASE_URL}/api/users/register/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new Error(errorData?.username?.[0] || errorData?.email?.[0] || "Registration failed");
+  }
+
+  return res.json();
+}
