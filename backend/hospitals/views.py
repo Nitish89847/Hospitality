@@ -24,8 +24,9 @@ class HospitalMatchView(APIView):
         result = []
         for hospital in hospitals:
             hospital_data = HospitalSerializer(hospital).data
+            room_lookup = {room.id: room for room in hospital.room_types.all()}
             for room in hospital_data["room_types"]:
-                room_obj = hospital.room_types.get(id=room["id"])
+                room_obj = room_lookup.get(room["id"])
                 room.update(compute_room_coverage(policy, room_obj))
             result.append(hospital_data)
 
