@@ -68,3 +68,16 @@ export async function registerRequest(data: {
 
   return res.json();
 }
+
+export async function getJourneys(token: string) {
+  return authenticatedFetch("/api/journey/", token);
+}
+
+export async function advanceJourneyStage(journeyId: number, token: string) {
+  const res = await fetch(`${API_BASE_URL}/api/journey/${journeyId}/advance/`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to advance stage");
+  return res.json();
+}
