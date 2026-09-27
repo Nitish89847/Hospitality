@@ -14,7 +14,7 @@ During hospital admissions, patients and caregivers often can't get timely answe
 ## Tech Stack
 
 - **Frontend:** Next.js (App Router), React, TypeScript, Tailwind CSS
-- **Backend:** Django, Django REST Framework, JWT authentication 
+- **Backend:** Django, Django REST Framework, JWT authentication
 - **Database:** PostgreSQL
 - **Deployment:** Render (backend + Postgres), Vercel (frontend)
 
