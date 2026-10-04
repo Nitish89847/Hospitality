@@ -34,7 +34,7 @@ export default function JourneyPage() {
   const activeJourney = journeys?.[0];
 
   const advanceMutation = useMutation({
-    mutationFn: () => advanceJourneyStage(activeJourney.id, token!),
+    mutationFn: () => advanceJourneyStage(activeJourney.id, auth.token!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journeys"] });
     },
