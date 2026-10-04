@@ -76,7 +76,14 @@ export default function DashboardPage() {
   }, [router]);
 
   if (loading) return <main className="p-8 text-center">Loading...</main>;
-  if (error) return <main className="p-8 text-center text-red-600">{error}</main>;
+  if (error) return (
+    <main className="p-8 text-center">
+      <p className="text-gray-700 mb-4">{error}</p>
+      <a href="/plans" className="text-blue-600 hover:underline font-medium">
+        Browse insurance plans
+      </a>
+    </main>
+  );
 
   return (
     <main className="max-w-4xl mx-auto p-6">

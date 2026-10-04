@@ -48,6 +48,37 @@ export async function authenticatedFetch(path: string, token: string) {
   return res.json();
 }
 
+export async function authenticatedPost(path: string, token: string, body?: object) {
+  let res = await fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(body ? { "Content-Type": "application/json" } : {}),
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  });
+
+  if (res.status === 401) {
+    const refreshToken = sessionStorage.getItem("refresh_token");
+    if (!refreshToken) throw new Error("Not authenticated");
+
+    const { access } = await refreshAccessToken(refreshToken);
+    sessionStorage.setItem("access_token", access);
+
+    res = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access}`,
+        ...(body ? { "Content-Type": "application/json" } : {}),
+      },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+  }
+
+  if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+  return res.json();
+}
+
 export async function registerRequest(data: {
   username: string;
   email: string;
@@ -74,10 +105,17 @@ export async function getJourneys(token: string) {
 }
 
 export async function advanceJourneyStage(journeyId: number, token: string) {
-  const res = await fetch(`${API_BASE_URL}/api/journey/${journeyId}/advance/`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) throw new Error("Failed to advance stage");
-  return res.json();
+  return authenticatedPost(`/api/journey/${journeyId}/advance/`, token);
+}
+
+export async function getInsurers(token: string) {
+  return authenticatedFetch("/api/insurance/insurers/", token);
+}
+
+export async function getPlans(insurerId: number, token: string) {
+  return authenticatedFetch(`/api/insurance/plans/?insurer=${insurerId}`, token);
+}
+
+export async function enrollInPlan(planId: number, token: string) {
+  return authenticatedPost(`/api/insurance/plans/${planId}/enroll/`, token);
 }

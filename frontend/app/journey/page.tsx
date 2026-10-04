@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { getJourneys, advanceJourneyStage } from "@/lib/api";
@@ -8,13 +9,26 @@ const STAGES = ["admission", "investigation", "procedure", "recovery", "discharg
 
 export default function JourneyPage() {
   const router = useRouter();
-  const token = typeof window !== "undefined" ? sessionStorage.getItem("access_token") : null;
   const queryClient = useQueryClient();
 
+  const [auth, setAuth] = useState<{ token: string | null; checked: boolean }>({
+    token: null,
+    checked: false,
+  });
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("access_token");
+    setAuth({ token: stored, checked: true });
+    if (!stored) {
+      router.push("/login");
+    }
+  }, [router]);
+
+
   const { data: journeys, isLoading, error } = useQuery({
-    queryKey: ["journeys", token],
-    queryFn: () => getJourneys(token!),
-    enabled: !!token,
+    queryKey: ["journeys", auth.token],
+    queryFn: () => getJourneys(auth.token!),
+    enabled: !!auth.token,
   });
 
   const activeJourney = journeys?.[0];
@@ -26,8 +40,7 @@ export default function JourneyPage() {
     },
   });
 
-  if (!token) {
-    router.push("/login");
+  if (!auth.checked || !auth.token) {
     return null;
   }
 

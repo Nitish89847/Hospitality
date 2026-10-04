@@ -19,6 +19,7 @@ export default function LoginPage() {
     try {
       const data = await loginRequest(username, password);
       sessionStorage.setItem("access_token", data.access);
+      sessionStorage.setItem("refresh_token", data.refresh);
       router.push("/dashboard");
     } catch (err) {
       setError("Login failed. Check your username and password.");

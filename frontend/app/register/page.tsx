@@ -24,6 +24,7 @@ export default function RegisterPage() {
       // Auto-login right after successful registration
       const loginData = await loginRequest(username, password);
       sessionStorage.setItem("access_token", loginData.access);
+      sessionStorage.setItem("refresh_token", loginData.refresh);
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Registration failed. Try a different username.");
