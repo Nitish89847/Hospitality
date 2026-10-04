@@ -30,7 +30,7 @@ class PolicyPlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = PolicyPlan
         fields = [
-            "id", "insurer", "insurer_name", "name", "scheme_type",
+            "id", "plan", "insurer", "insurer_name", "name", "scheme_type",
             "sum_insured", "room_eligibility", "covered_procedures",
             "exclusions", "co_pay_percent",
         ]
